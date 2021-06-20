@@ -25,7 +25,7 @@ setInterval(async () => {
         const user_id = user.user_id;
         await bot.telegram.sendMessage(user_id, text);
     }
-}, 200)
+}, 3600000)
 bot.start(async (ctx) => {
     console.log(ctx.chat.id);
     const isExists = await db.get('SELECT * FROM user WHERE user_id=?', [ctx.chat.id]);
