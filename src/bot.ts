@@ -43,7 +43,6 @@ class Bot {
             {
                 name: '/get',
                 func: async (ctx) => {
-                    throw new Error("some test");
                     return await this.getRandomText();
 
                 }
