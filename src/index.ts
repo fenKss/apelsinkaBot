@@ -7,8 +7,8 @@ import {Telegraf} from "telegraf";
 const cheerio = require('cheerio');
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const db = new SqDatabase();
-
-
+const interval = Number(process.env?.INTERVAL || 3600000);
+console.log(interval);
 setInterval(async () => {
     const page = getRandomArbitrary(1, 6);
     const url = `https://datki.net/komplimenti/page/${page}`;
@@ -25,7 +25,7 @@ setInterval(async () => {
         const user_id = user.user_id;
         await bot.telegram.sendMessage(user_id, text);
     }
-}, 3600000)
+}, interval)
 bot.start(async (ctx) => {
     console.log(ctx.chat.id);
     const isExists = await db.get('SELECT * FROM user WHERE user_id=?', [ctx.chat.id]);
@@ -44,8 +44,7 @@ bot.hears('/stop', async (ctx) => {
     ctx.reply('Done');
 });
 bot.hears('hi', async (ctx) => {
-    const a = await db.all(`SELECT *
-                            FROM user`);
+    const a = await db.all(`SELECT * FROM user`);
     ctx.reply(JSON.stringify(a));
 })
 bot.help((ctx) => ctx.reply('/stop - Остановить. /start - Запустить'))
