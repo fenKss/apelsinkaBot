@@ -78,7 +78,7 @@ class Bot {
         const $ = cheerio.load(await response.text());
         const posts = $(`article.post.dn-entry-content p`).toArray();
         const random = this.getRandomArbitrary(0, posts.length - 1);
-        console.log(posts, random);
+        console.log(response.text(), posts, random);
         const post = posts[random];
         //@ts-ignore
         return post.children[0]?.data || '';
