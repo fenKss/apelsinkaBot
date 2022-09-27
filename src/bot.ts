@@ -50,26 +50,21 @@ class Bot {
             {
                 name: '/stop',
                 func: async (ctx) => {
-                    await this._db.run(`DELETE
-                                        FROM user
-                                        WHERE user_id = ?`, [ctx.chat.id]);
-
+                    await this._db.run(`DELETE FROM user WHERE user_id = ?`, [ctx.chat.id]);
                     return 'Done';
                 }
             },
             {
                 name: '/hi',
                 func: async (ctx) => {
-                    const all = await this._db.all(`SELECT *
-                                                    FROM user`);
+                    const all = await this._db.all(`SELECT * FROM user`);
                     return JSON.stringify(all);
                 }
             },
             {
                 name: '/count',
                 func: async (ctx) => {
-                    const count = await this._db.all(`SELECT count(1) as count
-                                                      FROM user`);
+                    const count = await this._db.all(`SELECT count(1) as count FROM user`);
                     return count[0].count;
                 }
             },
@@ -83,6 +78,7 @@ class Bot {
         const $ = cheerio.load(await response.text());
         const posts = $(`article.post.dn-entry-content p`).toArray();
         const random = this.getRandomArbitrary(0, posts.length - 1);
+        console.log(posts, random);
         const post = posts[random];
         //@ts-ignore
         return post.children[0]?.data || '';
