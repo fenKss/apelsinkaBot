@@ -72,17 +72,16 @@ class Bot {
     }
 
     getRandomText = async (): Promise<string> => {
-        const page = this.getRandomArbitrary(1, 97);
+        const page = this.getRandomArbitrary(1, 42);
         const url = `http://kompli.me/komplimenty-devushke/page/${page}`;
         const response = await fetch(url);
         const text = await response.text()
         const $ = cheerio.load(text);
-        const posts = $(`.post-card__title a`).toArray();
-
+        const posts = $(`main .post-card__category`).parent().find(`.post-card__title a`).toArray();
         const random = this.getRandomArbitrary(0, posts.length - 1);
         const post = posts[random];
         //@ts-ignore
-        return post.children[0]?.data || '1';
+        return post?.children[0]?.data || 'Ты словно роза! Но украшают тебя не лепестки, а бесподобная улыбка и восхитительные глазки!';
     }
     getRandomArbitrary = (min, max) => {
         return Math.round(Math.random() * (max - min) + min);
