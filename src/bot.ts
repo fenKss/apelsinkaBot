@@ -72,17 +72,17 @@ class Bot {
     }
 
     getRandomText = async (): Promise<string> => {
-        const page = this.getRandomArbitrary(1, 6);
-        const url = `https://datki.net/komplimenti/page/${page}`;
+        const page = this.getRandomArbitrary(1, 97);
+        const url = `http://kompli.me/komplimenty-devushke/page/${page}`;
         const response = await fetch(url);
         const text = await response.text()
         const $ = cheerio.load(text);
-        const posts = $(`article.post.dn-entry-content p`).toArray();
+        const posts = $(`.post-card__title a`).toArray();
+
         const random = this.getRandomArbitrary(0, posts.length - 1);
-        console.log(text, posts, random);
         const post = posts[random];
         //@ts-ignore
-        return post.children[0]?.data || '';
+        return post.children[0]?.data || '1';
     }
     getRandomArbitrary = (min, max) => {
         return Math.round(Math.random() * (max - min) + min);
