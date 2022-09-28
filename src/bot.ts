@@ -116,7 +116,16 @@ class Bot {
             for (const i in users) {
                 const user = users[i];
                 const user_id = user.user_id;
-                await this.bot.telegram.sendMessage(user_id, text);
+                try {
+                    await this.bot.telegram.sendMessage(user_id, text);
+                } catch (e) {
+                    if (e.error_code == 403 && e.error_message == 'Forbidden: bot was blocked by the user'){
+                        await this._db.run(`DELETE FROM user WHERE user_id = ?`, [user_id]);
+                        if (this._adminChatId) {
+                            await this.bot.telegram.sendMessage(this._adminChatId, `Blocked ${user_id}`);
+                        }
+                    }
+                }
             }
         }, this._interval)
     }
